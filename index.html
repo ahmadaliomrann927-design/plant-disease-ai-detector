@@ -5,143 +5,41 @@
     <title>كشف أمراض النبات بالذكاء الاصطناعي</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body {
-            font-family: "Tahoma", sans-serif;
-            background: #f4f7f5;
-            margin: 0;
-            padding: 0;
-            color: #1f2933;
-        }
-        header {
-            background: linear-gradient(135deg, #1b5e20, #4caf50);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0 0 10px;
-        }
-        header p {
-            margin: 0;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            background: white;
-            padding: 20px 20px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-        }
-        .section-title {
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #1b5e20;
-        }
-        .upload-box {
-            border: 2px dashed #a5d6a7;
-            border-radius: 10px;
-            padding: 25px;
-            text-align: center;
-            background: #f9fff9;
-        }
-        .upload-box input[type="file"] {
-            margin-top: 10px;
-        }
-        button {
-            background: #2e7d32;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        button:disabled {
-            background: #9e9e9e;
-            cursor: not-allowed;
-        }
-        button:hover:enabled {
-            background: #1b5e20;
-        }
-        .preview {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .preview img {
-            max-width: 100%;
-            max-height: 250px;
-            border-radius: 10px;
-            border: 1px solid #e0e0e0;
-        }
-        .result {
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 10px;
-            background: #f1f8e9;
-            border: 1px solid #c5e1a5;
-        }
-        .result h3 {
-            margin-top: 0;
-            color: #33691e;
-        }
-        .result p {
-            margin: 5px 0;
-        }
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 999px;
-            font-size: 12px;
-            background: #e8f5e9;
-            color: #1b5e20;
-            border: 1px solid #c8e6c9;
-        }
-        footer {
-            margin-top: 40px;
-            padding: 15px;
-            text-align: center;
-            font-size: 13px;
-            background: #e8f5e9;
-            color: #1b5e20;
-            border-top: 1px solid #c8e6c9;
-        }
+        body { font-family: Tahoma; background:#f4f7f5; margin:0; padding:0; }
+        header { background:#2e7d32; color:white; padding:20px; text-align:center; }
+        .container { max-width:900px; margin:20px auto; background:white; padding:20px; border-radius:10px; }
+        .upload-box { border:2px dashed #81c784; padding:20px; text-align:center; border-radius:10px; }
+        button { background:#2e7d32; color:white; border:none; padding:10px 20px; border-radius:5px; margin-top:10px; }
+        .preview img { max-width:100%; margin-top:10px; border-radius:10px; }
+        .result { background:#e8f5e9; padding:15px; border-radius:10px; margin-top:20px; }
+        footer { text-align:center; padding:15px; background:#e8f5e9; margin-top:30px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>منصة كشف أمراض النبات بالذكاء الاصطناعي</h1>
-    <p>ارفع صورة لمحصولك، ودع النظام يحلل المرض ويقترح العلاج المناسب</p>
+    <p>ارفع صورة لمحصولك ودع الذكاء الاصطناعي يحلل المرض</p>
 </header>
 
 <div class="container">
-    <h2 class="section-title">رفع صورة المحصول</h2>
     <div class="upload-box">
-        <p>اختر صورة واضحة للأوراق أو الثمار التي يظهر عليها المرض.</p>
+        <p>اختر صورة واضحة للأوراق أو الثمار</p>
         <input type="file" id="imageInput" accept="image/*">
-        <br>
         <button id="analyzeBtn" disabled>تحليل الصورة</button>
-        <p id="statusMsg"></p>
+        <p id="status"></p>
     </div>
 
-    <div class="preview" id="previewBox" style="display:none;">
+    <div class="preview" id="preview" style="display:none;">
         <h3>معاينة الصورة</h3>
-        <img id="previewImage" src="" alt="صورة المحصول">
+        <img id="previewImg">
     </div>
 
-    <div class="result" id="resultBox" style="display:none;">
+    <div class="result" id="result" style="display:none;">
         <h3>نتيجة التحليل</h3>
-        <p><span class="badge">اسم المرض</span> <span id="diseaseName"></span></p>
-        <p><span class="badge">العامل المسبب</span> <span id="pathogen"></span></p>
-        <p><span class="badge">الأعراض</span> <span id="symptoms"></span></p>
-        <p><span class="badge">الأدوية المقترحة</span> <span id="treatments"></span></p>
-        <p><span class="badge">إرشادات وقائية</span> <span id="prevention"></span></p>
-        <p style="margin-top:10px;font-size:12px;color:#555;">
-            * هذه التوصيات لأغراض تعليمية، ويُنصح دائمًا باستشارة مهندس زراعي مختص قبل استخدام أي مبيد.
-        </p>
+        <p><strong>المرض:</strong> <span id="disease"></span></p>
+        <p><strong>الدقة:</strong> <span id="confidence"></span></p>
+        <p><strong>ملاحظة:</strong> التحليل تجريبي وقد لا يكون دقيق 100٪</p>
     </div>
 </div>
 
@@ -151,74 +49,68 @@
 </footer>
 
 <script>
-    const imageInput = document.getElementById('imageInput');
-    const analyzeBtn = document.getElementById('analyzeBtn');
-    const statusMsg = document.getElementById('statusMsg');
-    const previewBox = document.getElementById('previewBox');
-    const previewImage = document.getElementById('previewImage');
-    const resultBox = document.getElementById('resultBox');
+const imageInput = document.getElementById("imageInput");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const statusMsg = document.getElementById("status");
+const preview = document.getElementById("preview");
+const previewImg = document.getElementById("previewImg");
+const resultBox = document.getElementById("result");
+const diseaseEl = document.getElementById("disease");
+const confidenceEl = document.getElementById("confidence");
 
-    const diseaseNameEl = document.getElementById('diseaseName');
-    const pathogenEl = document.getElementById('pathogen');
-    const symptomsEl = document.getElementById('symptoms');
-    const treatmentsEl = document.getElementById('treatments');
-    const preventionEl = document.getElementById('prevention');
+let selectedFile = null;
 
-    let selectedFile = null;
+imageInput.addEventListener("change", () => {
+    selectedFile = imageInput.files[0];
+    analyzeBtn.disabled = !selectedFile;
 
-    imageInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) {
-            analyzeBtn.disabled = true;
-            previewBox.style.display = 'none';
+    const reader = new FileReader();
+    reader.onload = e => {
+        previewImg.src = e.target.result;
+        preview.style.display = "block";
+    };
+    reader.readAsDataURL(selectedFile);
+});
+
+analyzeBtn.addEventListener("click", async () => {
+    if (!selectedFile) return;
+
+    statusMsg.textContent = "جاري تحليل الصورة...";
+    resultBox.style.display = "none";
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+        const response = await fetch(
+            "https://api-inference.huggingface.co/models/nateraw/plant-disease-classification",
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer hf_xxxxxxxxxxxxxxxxxxxxx" 
+                },
+                body: formData
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.error) {
+            statusMsg.textContent = "النموذج يحتاج وقت ليشتغل، حاول بعد 20 ثانية.";
             return;
         }
-        selectedFile = file;
-        analyzeBtn.disabled = false;
 
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            previewImage.src = evt.target.result;
-            previewBox.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    });
+        const top = data[0];
+        diseaseEl.textContent = top.label;
+        confidenceEl.textContent = (top.score * 100).toFixed(2) + "%";
 
-    analyzeBtn.addEventListener('click', async () => {
-        if (!selectedFile) return;
+        resultBox.style.display = "block";
+        statusMsg.textContent = "تم التحليل بنجاح.";
 
-        statusMsg.textContent = "جاري رفع الصورة وتحليلها...";
-        resultBox.style.display = 'none';
-
-        const formData = new FormData();
-        formData.append('image', selectedFile);
-
-        try {
-            // عدّل هذا الرابط حسب مكان استضافة الـ API
-            const response = await fetch('https://your-backend-url.com/api/analyze', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('خطأ في الاتصال بالخادم');
-            }
-
-            const data = await response.json();
-
-            diseaseNameEl.textContent = data.disease_name || 'غير معروف';
-            pathogenEl.textContent = data.pathogen || 'غير محدد';
-            symptomsEl.textContent = data.symptoms || 'لا توجد بيانات';
-            treatmentsEl.textContent = data.treatments || 'لا توجد توصيات';
-            preventionEl.textContent = data.prevention || 'لا توجد إرشادات';
-
-            resultBox.style.display = 'block';
-            statusMsg.textContent = "تم التحليل بنجاح.";
-        } catch (err) {
-            console.error(err);
-            statusMsg.textContent = "حدث خطأ أثناء التحليل. تأكد من الاتصال بالإنترنت أو حاول لاحقًا.";
-        }
-    });
+    } catch (err) {
+        statusMsg.textContent = "حدث خطأ أثناء التحليل.";
+    }
+});
 </script>
 
 </body>
